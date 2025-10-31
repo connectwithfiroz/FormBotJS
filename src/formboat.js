@@ -1,4 +1,4 @@
-const ChatForm = {
+const FormBoat = {
   config: {},
   current: 0,
   answers: [],
@@ -41,14 +41,13 @@ const ChatForm = {
           : "🌙";
       });
 
-    document
-      .getElementById("restart-btn")
-      .addEventListener("click", (e)=> {
-          this.answers = [];//empty
-          document.getElementById("chat-messages").innerHTML = "";
-          this.current = 0;
-          this.showBotMessage();
-      });
+    document.getElementById("restart-btn").addEventListener("click", (e) => {
+      this.answers = []; //empty
+      document.getElementById("chat-messages").innerHTML = "";
+      this.current = 0;
+      this.showBotMessage();
+    });
+    this.aut = "Rmlyb3ogQW5zYXJpICgrOTEgODc4OTcwMTkxNik=";
 
     this.current = 0;
     this.answers = [];
@@ -63,6 +62,55 @@ const ChatForm = {
     });
 
     this.showBotMessage();
+    //if color
+    if (config.color1) this.setChatColor(config.color1);
+  },
+  setChatColor(color1) {
+    document.documentElement.style.setProperty("--chat_color1", color1);
+  },
+
+  escapeHTML(str) {
+    return str.replace(
+      /[&<>"']/g,
+      (m) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        }[m])
+    );
+  },
+  showImagePreview(url, name) {
+    // Create popup dynamically if not exists
+    if (!document.getElementById("imagePopup")) {
+      const popup = document.createElement("div");
+      popup.id = "imagePopup";
+      popup.className = "image-popup";
+      popup.innerHTML = `
+      <img id="popupImage" src="" alt="">
+      <span class="close-btn">×</span>
+    `;
+      document.body.appendChild(popup);
+      popup
+        .querySelector(".close-btn")
+        .addEventListener("click", () => this.closeImagePopup());
+      popup.addEventListener("click", (e) => {
+        if (e.target === popup) this.closeImagePopup();
+      });
+    }
+
+    const popup = document.getElementById("imagePopup");
+    const img = popup.querySelector("#popupImage");
+    img.src = url;
+    img.alt = name;
+    popup.style.display = "flex";
+  },
+
+  closeImagePopup() {
+    const popup = document.getElementById("imagePopup");
+    if (popup) popup.style.display = "none";
   },
 
   showMessage(text, sender = "bot") {
@@ -155,13 +203,49 @@ const ChatForm = {
     } else if (q.type === "file") {
       const file = this.inputEl.files[0];
       if (!file) return alert("Please select a file.");
+
+      // Check max size
       if (q.attrs && q.attrs["data-maxsize"]) {
         const maxMB = parseFloat(q.attrs["data-maxsize"]);
         if (file.size > maxMB * 1024 * 1024)
           return alert(`File must be smaller than ${maxMB} MB.`);
       }
-      answer = file.name;
-      fileData = file;
+
+      const fileURL = URL.createObjectURL(file);
+      let msg = document.createElement("div");
+      msg.className = "chat-bubble user";
+
+      // Handle image vs other file types
+      if (file.type.startsWith("image/")) {
+        const link = document.createElement("a");
+        link.href = "#";
+        link.textContent = `📷 ${file.name}`;
+        link.className = "file-link";
+        link.addEventListener("click", (e) => {
+          e.preventDefault();
+          this.showImagePreview(fileURL, file.name);
+        });
+        msg.appendChild(link);
+      } else {
+        const link = document.createElement("a");
+        link.href = fileURL;
+        link.target = "_blank";
+        link.textContent = `📎 ${file.name}`;
+        link.className = "file-link";
+        msg.appendChild(link);
+      }
+
+      answer = msg;
+      //   this.scrollToBottom();
+
+      //   this.fileData = file;
+      //   this.answers.push({ label: q.label, answer: file.name });
+
+      //   if (this.current < this.config.questions.length) {
+      //     setTimeout(() => this.showBotMessage(), 400);
+      //   } else {
+      //     this.finish();
+      //   }
     } else if (q.type === "multiselect") {
       const selected = Array.from(this.inputEl.selectedOptions).map(
         (o) => o.value
@@ -176,8 +260,13 @@ const ChatForm = {
         return;
       }
     }
-
-    this.showUserMessage(answer);
+    if (q.type != "file") {
+      answer = this.escapeHTML(answer);
+      this.showUserMessage(answer);
+    } else {
+      this.messagesEl.appendChild(answer);
+      this.scrollToBottom();
+    }
     this.answers.push({
       label: q.label,
       name: q.name || `q${this.current}`,
