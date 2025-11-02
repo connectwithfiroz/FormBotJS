@@ -50,9 +50,7 @@ const FormBot = {
     document.getElementById("restart-btn").addEventListener("click", (e) => {
       this.resetForm();
     });
-    document.getElementById("restart-btn-2").addEventListener("click", (e) => {
-      this.resetForm();
-    });
+
     this.aut = "Rmlyb3ogQW5zYXJpICgrOTEgODc4OTcwMTkxNik=";
 
     this.current = 0;
@@ -328,19 +326,28 @@ const FormBot = {
           method: "POST",
           body: formData,
         });
-        let message = '';
-        try{
+        let message = "";
+        try {
           const data = await res.json();
-          if(data && data.message){
+          if (data && data.message) {
             message = data.message;
           }
-        } catch(e){
+        } catch (e) {
           //ignore json parse error
         }
         if (res.ok) {
           this.showMessage(message ?? "🎉 Submitted successfully!");
-          //if submitted successfully then clear answers, at the place of input and send button show restart button
-          this.chat_input_area.innerHTML = `<button id="restart-btn-2" >Restart</button>`;
+
+          // Replace input area with restart button
+          this.chat_input_area.innerHTML = `<button id="restart-btn-2">Restart</button>`;
+
+          // Add listener for restart
+          const restartBtn = document.getElementById("restart-btn-2");
+          restartBtn.addEventListener("click", () => {
+            this.resetForm();
+          });
+
+          // Clear stored answers
           this.answers = [];
         } else {
           this.showMessage(message ?? "⚠️ Submission failed.");
