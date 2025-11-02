@@ -1,4 +1,10 @@
-const FormBoat = {
+/*!
+ * FormBotJS v1.0.0
+ * (c) 2025 Firoz Ansari — All rights reserved
+ * License: https://quizsagar.com/formbot/license
+ */
+console.log("%cFormBotJS by Firoz Ansari", "color:#0078ff;font-weight:bold;");
+const FormBot = {
   config: {},
   current: 0,
   answers: [],
