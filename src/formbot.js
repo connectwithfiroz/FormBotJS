@@ -321,10 +321,19 @@ const FormBot = {
           method: "POST",
           body: formData,
         });
+        let message = '';
+        try{
+          const data = await res.json();
+          if(data && data.message){
+            message = data.message;
+          }
+        } catch(e){
+          //ignore json parse error
+        }
         if (res.ok) {
-          this.showMessage("🎉 Submitted successfully!");
+          this.showMessage(message ?? "🎉 Submitted successfully!");
         } else {
-          this.showMessage("⚠️ Submission failed.");
+          this.showMessage(message ?? "⚠️ Submission failed.");
         }
       } catch (e) {
         this.showMessage("⚠️ Network error.");
