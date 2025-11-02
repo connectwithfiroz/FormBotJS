@@ -296,11 +296,15 @@ const FormBot = {
       file: fileData,
     });
     this.current++;
-    setTimeout(() => this.showBotMessage(), 500);
+    setTimeout(() => this.showBotMessage(), 200);
   },
 
   async finish() {
-    this.showMessage("✅ Submitting your responses...");
+    this.showMessage("Sending your responses...");
+    //show loader in send-btn
+    let old_send_btn = this.sendBtn.innerHTML;
+    this.sendBtn.innerHTML = "⏳ Sending...";
+    this.sendBtn.disabled = true;
 
     const formData = new FormData();
     this.answers.forEach((a) => {
@@ -340,12 +344,15 @@ const FormBot = {
       }
     } else if (this.config.mode === "return") {
       // Just show summary or success message
-      this.showMessage("✅ Responses collected successfully!");
+      this.showMessage("Responses collected successfully!");
     }
 
     // Always call onComplete with both answers & formData
     if (this.config.onComplete) {
       this.config.onComplete(this.answers, formData);
     }
+    //restore send-btn
+    this.sendBtn.innerHTML = old_send_btn;
+    this.sendBtn.disabled = false;
   },
 };
