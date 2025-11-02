@@ -112,13 +112,13 @@
     <div class="row align-items-center text-center text-md-start">
       <!-- Right: Chat Form -->
       <div class="col-12 col-md-5">
-        
+
         <div id="chat-form-container" class="border rounded p-3 bg-white shadow-sm"></div>
         <p class="p-1 fst-italic small text-muted">
           This form is only for demonstration purposes; we don't collect any data as the endpoint is just for testing.
         </p>
       </div>
-      
+
 
       <!-- Middle: Arrow -->
       <div class="col-12 col-md-2 text-center my-3 my-md-0">
@@ -179,9 +179,60 @@
         </form>
       </div>
 
-      
+
     </div>
   </section>
+
+  <!-- how to use -->
+  <section class="container py-5">
+    <div class="row align-items-center">
+      <!-- LEFT SIDE -->
+      <div class="col-md-5 mb-4 mb-md-0">
+        <h2 class="fw-bold">🚀 How to Use FormBotJS</h2>
+        <p class="text-muted">
+          Add <strong>FormBotJS</strong> to your project in just 3 simple steps.
+          Include the CDN links, create a container, and initialize the bot with your form questions.
+        </p>
+
+        <ul class="list-unstyled">
+          <li>✅ Step 1: Add JS and CSS</li>
+          <li>✅ Step 2: Create a container</li>
+          <li>✅ Step 3: Initialize with questions</li>
+        </ul>
+      </div>
+
+      <!-- RIGHT SIDE -->
+      <div class="col-md-7">
+        <div class="bg-dark text-light p-3 rounded position-relative">
+          <pre class="mb-0"><code>
+// Step 1: Add CDN
+&lt;link rel="stylesheet" href="https://formbotjs.tutizo.com/src/formbot.min.css"&gt;
+&lt;script src="https://formbotjs.tutizo.com/src/formbot.min.js"&gt;&lt;/script&gt;
+
+// Step 2: Add Container
+&lt;div id="chat-form-container" class="border rounded p-3 bg-white shadow-sm"&gt;&lt;/div&gt;
+
+// Step 3: Initialize
+&lt;script&gt;
+const questions = [
+  { label: "Your name?", name: "name", type: "text" },
+  { label: "Your email?", name: "email", type: "email" }
+];
+
+FormBot.init({
+  color1: "#28a745",
+  chat_containerId: "chat-form-container",
+  post_url: "https://your_endpoint.com/api/submit",
+  questions,
+  onComplete: (data) => console.log(data),
+});
+&lt;/script&gt;
+        </code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
 
 
