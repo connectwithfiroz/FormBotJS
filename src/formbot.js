@@ -48,15 +48,16 @@ const FormBot = {
       });
 
     document.getElementById("restart-btn").addEventListener("click", (e) => {
-      this.resetForm();
+      this.answers = []; //empty
+      document.getElementById("chat-messages").innerHTML = "";
+      this.current = 0;
+      this.showBotMessage();
     });
-
     this.aut = "Rmlyb3ogQW5zYXJpICgrOTEgODc4OTcwMTkxNik=";
 
     this.current = 0;
     this.answers = [];
     this.messagesEl = document.getElementById("chat-messages");
-    this.chat_input_area = document.getElementById("chat-input-area");
     this.chatInputWrapper = document.getElementById("chat-input-wrapper");
     this.formEl = document.getElementById("chatInputSubmitForm");
     this.sendBtn = document.getElementById("send-btn");
@@ -74,12 +75,6 @@ const FormBot = {
     if (config.color1) this.setChatColor(config.color1);
 
     this.chat_form_title.innerHTML = config.chat_form_title ?? "Chat assistant";
-  },
-  resetForm() {
-    this.answers = [];
-    document.getElementById("chat-messages").innerHTML = "";
-    this.current = 0;
-    this.showBotMessage();
   },
   setChatColor(color1) {
     document.documentElement.style.setProperty("--chat_color1", color1);
@@ -326,29 +321,17 @@ const FormBot = {
           method: "POST",
           body: formData,
         });
-        let message = "";
-        try {
+        let message = '';
+        try{
           const data = await res.json();
-          if (data && data.message) {
+          if(data && data.message){
             message = data.message;
           }
-        } catch (e) {
+        } catch(e){
           //ignore json parse error
         }
         if (res.ok) {
           this.showMessage(message ?? "🎉 Submitted successfully!");
-
-          // Replace input area with restart button
-          this.chat_input_area.innerHTML = `<button id="restart-btn-2">Restart</button>`;
-
-          // Add listener for restart
-          const restartBtn = document.getElementById("restart-btn-2");
-          restartBtn.addEventListener("click", () => {
-            this.resetForm();
-          });
-
-          // Clear stored answers
-          this.answers = [];
         } else {
           this.showMessage(message ?? "⚠️ Submission failed.");
         }

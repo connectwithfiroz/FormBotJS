@@ -65,16 +65,13 @@
     margin-right: 10px;
 }
 
-#send-btn, #restart-btn-2 {
+#send-btn {
     background: var(--chat_color1);
     color: white;
     border: none;
     border-radius: 5px;
     padding: 8px 12px;
     cursor: pointer;
-}
-#restart-btn-2{
-    width: 100%;
 }
 
 .light-theme {
