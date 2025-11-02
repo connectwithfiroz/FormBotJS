@@ -5,7 +5,7 @@ const FormBoat = {
   initHTML: `
     <div id="chat-container" class="chat-box light-theme">
     <div class="chat-header">
-        <h3>Chat Assistant</h3>
+        <h6>Chat Assistant</h6>
         <div class="chat-actions">
             <button id="restart-btn">Restart</button>
             <button id="theme-toggle-btn">🌙</button>
