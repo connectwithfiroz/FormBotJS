@@ -244,6 +244,120 @@
       </div>
     </div>
   </section>
+  <section id="docs-questions" class="container py-5">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <h3 class="fw-bold">How to pass questions</h3>
+        <p class="text-muted">
+          Each item in <code>questions</code> is a single step in the conversational form.
+          It closely mirrors an HTML input: <code>label</code>, <code>name</code>, <code>type</code>,
+          <code>attrs</code> (HTML-like attributes) and optional <code>options</code>.
+        </p>
+
+        <h5 class="mt-3">Common <code>type</code> values</h5>
+        <ul>
+          <li><code>text, email, number, date, file, textarea</code></li>
+          <li><code>select</code> (single), <code>multiselect</code> (multiple select)</li>
+          <li><code>radio, checkbox</code> (multiple choice)</li>
+          <li><code>hidden</code> (Won’t be displayed to the user but will be included in the answers object and
+            submitted to the endpoint, similar to <code>extraData</code>.)</li>
+
+          <li><code>message</code> (display-only bot message)</li>
+        </ul>
+
+        <h5 class="mt-3">Use <code>attrs</code> for validation & hints</h5>
+        <p class="text-muted mb-0">
+          Put HTML attributes here (they get applied to the generated input):
+        </p>
+        <ul class="small">
+          <li><code>required</code>, <code>minlength</code>, <code>maxlength</code></li>
+          <li><code>pattern</code>, <code>placeholder</code>, <code>title</code></li>
+          <li><code>min</code>, <code>max</code>, <code>step</code> (for numbers/dates)</li>
+          <li><code>accept</code> (file types), <code>data-maxsize</code> (file size MB)</li>
+        </ul>
+
+        <h5 class="mt-3">Top-level config</h5>
+        <ul>
+          <li><strong>chat_containerId</strong> — element id where form renders (required)</li>
+          <li><strong>chat_form_title</strong> — Form Title Deafult 'Chat Assistant'</li>
+          <li><strong>post_url</strong> — server endpoint for POST submissions</li>
+          <li><strong>color1</strong> — primary theme color (CSS var <code>--chat_color1</code>)</li>
+          <li><strong>mode</strong> — <code>"submit"</code> to POST, <code>"return"</code> to skip network</li>
+          <li><strong>extraData</strong> — object of extra key/value pairs to append to FormData (e.g. CSRF token)</li>
+          <li><strong>onComplete</strong> — callback called with <code>(answers, formData)</code> when finished</li>
+          <!-- <li><strong>showProgress</strong> — boolean to show “Question x of y” (optional)</li> -->
+          <!-- <li><strong>saveToLocalStorage</strong> — boolean to persist partial answers (optional)</li> -->
+        </ul>
+      </div>
+
+      <div class="col-lg-7">
+        <h5 class="fw-semibold">Example — question objects</h5>
+        <pre class="bg-light p-3 rounded"><code>// simple text + select + file example
+const questions = [
+  {
+    label: "What's your full name?",
+    name: "name",
+    type: "text",
+    attrs: { required: true, minlength: 3, placeholder: "e.g., Raju Kumar" }
+  },
+
+  {
+    label: "Who are you?",
+    name: "role",
+    type: "select",
+    options: ["Student", "Teacher"],
+    attrs: { required: true }
+  },
+
+  {
+    label: "Which subjects are you interested in?",
+    name: "subjects",
+    type: "multiselect",
+    options: ["Math","Science","English"],
+    attrs: { required: true }
+  },
+
+  {
+    label: "Upload a profile photo (max 2MB)",
+    name: "photo",
+    type: "file",
+    attrs: { accept: "image/*", "data-maxsize": "2" }
+  },
+
+  // display-only final message (optional)
+  {
+    label: "Thanks! We'll contact you soon.",
+    name: "end_message",
+    type: "message"
+  }
+];</code></pre>
+
+        <h5 class="fw-semibold mt-3">Example — init / config</h5>
+        <pre class="bg-light p-3 rounded"><code>// initialize FormBot
+FormBot.init({
+  chat_containerId: "chat-form-container", // required
+  post_url: "/api/submit",                  // server endpoint (used when mode === "submit")
+  color1: "#28a745",                        // primary color (updates CSS var)
+  mode: "submit",                           // "submit" or "return"
+  extraData: { _token: "CSRF_TOKEN_HERE" }, // appended to FormData
+  showProgress: true,
+  saveToLocalStorage: true,
+  questions,                                // pass the questions array
+  onComplete: (answers, formData) => {
+    // answers = [{name, label, value, file?}, ...]
+    // formData = FormData instance (useful if you want to send it yourself)
+    console.log("collected:", answers);
+  }
+});</code></pre>
+
+        <p class="small text-muted mt-2">
+          Tip: put all HTML attributes inside <code>attrs</code>. That keeps the question definition compact and
+          predictable.
+        </p>
+      </div>
+    </div>
+  </section>
+
 
 
 
@@ -267,18 +381,20 @@
       document.getElementById('chat-section').style.display = 'block';
       document.getElementById('startDemoBtn').style.display = 'none';
 
+      // Initialize FormBot with questions
       const questions = [
+        // hidden CSRF token field won't be shown to user
+        {
+          label: "CSRF Token",
+          name: "_token",
+          type: "hidden",
+          attrs: { required: true, value: "jljlkjl" },
+        },
         {
           label: "What’s your full name?",
           name: "name",
           type: "text",
           attrs: { required: true, minlength: 3, placeholder: "e.g., Raju" },
-        },
-        {
-          label: "What’s your email?",
-          name: "email",
-          type: "email",
-          attrs: { required: true, placeholder: "e.g., raju@xyz.com" },
         },
         {
           label: "What’s your birthdate?",
@@ -309,12 +425,17 @@
       ];
 
       FormBot.init({
-        color1: "#28a745",
-        chat_form_title: "Enquiry Form",
-        chat_containerId: "chat-form-container",
-        post_url: "https://your_endpoint.com/api/submit",
+        color1: "#28a745", //set custom primary color
+        chat_form_title: "Enquiry Form", //set form title
+        chat_containerId: "chat-form-container", //Where to render the chat form
+        post_url: "https://your_endpoint.com/api/submit", //your form endpoint
+        mode: "submit", //submit automatically or just collect data - 'submit' or 'return'. In case of 'return', onComplete callback will be triggered with collected data.
         questions,
-        onComplete: (data) => console.log("Collected:", data),
+        extraData: { _token: "YOUR_TOKEN_IF_AVAILABLE" },
+        onComplete: (answers, formData) => {
+          console.log("All answers:", answers);
+          // you can also handle formData manually if needed
+        },
       });
     });
   </script>

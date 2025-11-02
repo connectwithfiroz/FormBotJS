@@ -1,7 +1,7 @@
 /*!
  * FormBotJS v1.0.0
  * (c) 2025 Firoz Ansari — All rights reserved
- * License: https://quizsagar.com/formbot/license
+ * License: https://formbot.tutizo.com/formbot/license
  */
 console.log("%cFormBotJS by Firoz Ansari", "color:#0078ff;font-weight:bold;");
 const FormBot = {
@@ -61,7 +61,9 @@ const FormBot = {
     this.chatInputWrapper = document.getElementById("chat-input-wrapper");
     this.formEl = document.getElementById("chatInputSubmitForm");
     this.sendBtn = document.getElementById("send-btn");
-    this.chat_form_title = document.querySelector("#chat-container #chat_formTitle");
+    this.chat_form_title = document.querySelector(
+      "#chat-container #chat_formTitle"
+    );
 
     this.formEl.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -72,7 +74,7 @@ const FormBot = {
     //if color
     if (config.color1) this.setChatColor(config.color1);
 
-    this.chat_form_title.innerHTML = config.chat_form_title ?? 'Chat assistant';
+    this.chat_form_title.innerHTML = config.chat_form_title ?? "Chat assistant";
   },
   setChatColor(color1) {
     document.documentElement.style.setProperty("--chat_color1", color1);
@@ -139,7 +141,18 @@ const FormBot = {
   },
 
   showBotMessage() {
-    const q = this.config.questions[this.current];
+    var q = this.config.questions[this.current];
+    while (q && q.type == "hidden") {
+      //push into answer
+      this.answers.push({
+        label: q.label,
+        name: q.name || `q${this.current}`,
+        value: q.attrs.value ?? "",
+      });
+      this.current++;
+      q = this.config.questions[this.current];
+    }
+    //If no question, finish
     if (!q) return this.finish();
 
     this.showMessage(q.label);
@@ -295,17 +308,35 @@ const FormBot = {
       else formData.append(a.name, a.value);
     });
 
-    try {
-      const res = await fetch(this.config.post_url, {
-        method: "POST",
-        body: formData,
-      });
-      if (res.ok) this.showMessage("🎉 Submitted successfully!");
-      else this.showMessage("⚠️ Submission failed.");
-    } catch (e) {
-      this.showMessage("⚠️ Network error.");
+    // Allow developer to inject extra keys before submission
+    if (this.config.extraData && typeof this.config.extraData === "object") {
+      for (const key in this.config.extraData) {
+        formData.append(key, this.config.extraData[key]);
+      }
     }
 
-    if (this.config.onComplete) this.config.onComplete(this.answers);
+    if (this.config.mode === "submit") {
+      try {
+        const res = await fetch(this.config.post_url, {
+          method: "POST",
+          body: formData,
+        });
+        if (res.ok) {
+          this.showMessage("🎉 Submitted successfully!");
+        } else {
+          this.showMessage("⚠️ Submission failed.");
+        }
+      } catch (e) {
+        this.showMessage("⚠️ Network error.");
+      }
+    } else if (this.config.mode === "return") {
+      // Just show summary or success message
+      this.showMessage("✅ Responses collected successfully!");
+    }
+
+    // Always call onComplete with both answers & formData
+    if (this.config.onComplete) {
+      this.config.onComplete(this.answers, formData);
+    }
   },
 };
