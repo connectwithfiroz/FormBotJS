@@ -11,7 +11,7 @@ const FormBot = {
   initHTML: `
     <div id="chat-container" class="chat-box light-theme">
     <div class="chat-header">
-        <h6>Chat Assistant</h6>
+        <h6 id="chat_formTitle">Chat Assistant</h6>
         <div class="chat-actions">
             <button id="restart-btn">Restart</button>
             <button id="theme-toggle-btn">🌙</button>
@@ -61,6 +61,7 @@ const FormBot = {
     this.chatInputWrapper = document.getElementById("chat-input-wrapper");
     this.formEl = document.getElementById("chatInputSubmitForm");
     this.sendBtn = document.getElementById("send-btn");
+    this.chat_form_title = document.querySelector("#chat-container #chat_formTitle");
 
     this.formEl.addEventListener("submit", (e) => {
       e.preventDefault();
@@ -70,6 +71,8 @@ const FormBot = {
     this.showBotMessage();
     //if color
     if (config.color1) this.setChatColor(config.color1);
+
+    this.chat_form_title.innerHTML = config.chat_form_title ?? 'Chat assistant';
   },
   setChatColor(color1) {
     document.documentElement.style.setProperty("--chat_color1", color1);

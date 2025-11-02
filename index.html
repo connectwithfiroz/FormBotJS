@@ -188,47 +188,29 @@
     <div class="row align-items-center">
       <!-- LEFT SIDE -->
       <div class="col-md-5 mb-4 mb-md-0">
-        <h2 class="fw-bold">🚀 How to Use FormBotJS</h2>
+        <h2 class="fw-bold">How to Use FormBotJS</h2>
         <p class="text-muted">
           Add <strong>FormBotJS</strong> to your project in just 3 simple steps.
           Include the CDN links, create a container, and initialize the bot with your form questions.
         </p>
 
         <ul class="list-unstyled">
-          <li>✅ Step 1: Add JS and CSS</li>
-          <li>✅ Step 2: Create a container</li>
-          <li>✅ Step 3: Initialize with questions</li>
+          <li>Step 1: Add JS and CSS</li>
+          <li>Step 2: Create a container</li>
+          <li>Step 3: Initialize with questions</li>
         </ul>
       </div>
 
       <!-- RIGHT SIDE -->
       <div class="col-md-7">
-        <div class="bg-dark text-light p-3 rounded position-relative">
-          <pre class="mb-0"><code>
-// Step 1: Add CDN
-&lt;link rel="stylesheet" href="https://formbotjs.tutizo.com/src/formbot.min.css"&gt;
-&lt;script src="https://formbotjs.tutizo.com/src/formbot.min.js"&gt;&lt;/script&gt;
-
-// Step 2: Add Container
-&lt;div id="chat-form-container" class="border rounded p-3 bg-white shadow-sm"&gt;&lt;/div&gt;
-
-// Step 3: Initialize
-&lt;script&gt;
-const questions = [
-  { label: "Your name?", name: "name", type: "text" },
-  { label: "Your email?", name: "email", type: "email" }
-];
-
-FormBot.init({
-  color1: "#28a745",
-  chat_containerId: "chat-form-container",
-  post_url: "https://your_endpoint.com/api/submit",
-  questions,
-  onComplete: (data) => console.log(data),
-});
-&lt;/script&gt;
-        </code></pre>
-        </div>
+        <p class="codepen" data-height="300" data-default-tab="html,result" data-slug-hash="JoGmaEL"
+          data-pen-title="form_boat_demo" data-user="LearnWithFiroz"
+          style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+          <span>See the Pen <a href="https://codepen.io/LearnWithFiroz/pen/JoGmaEL">
+              form_boat_demo</a> by Firoz (<a href="https://codepen.io/LearnWithFiroz">@LearnWithFiroz</a>)
+            on <a href="https://codepen.io">CodePen</a>.</span>
+        </p>
+        <script async src="https://public.codepenassets.com/embed/index.js"></script>
       </div>
     </div>
   </section>
@@ -247,8 +229,8 @@ FormBot.init({
 
   <!-- ✅ Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <!-- <script src="src/formbot.js"></script> -->
-  <script src="src/formbot.min.js"></script>
+  <script src="src/formbot.js"></script>
+  <!-- <script src="src/formbot.min.js"></script> -->
 
   <script>
     document.getElementById('startDemoBtn').addEventListener('click', () => {
@@ -298,6 +280,7 @@ FormBot.init({
 
       FormBot.init({
         color1: "#28a745",
+        chat_form_title: "Enquiry Form",
         chat_containerId: "chat-form-container",
         post_url: "https://your_endpoint.com/api/submit",
         questions,
