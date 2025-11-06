@@ -16,7 +16,7 @@
     align-items: center;
     background: var(--chat_color1);
     color: #fff;
-    padding: 6px 3px;
+    padding: 8px 3px;
 }
 
 .chat-header h6 {
