@@ -4,7 +4,6 @@
 
 .chat-box {
     width: 400px;
-    border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 0 10px rgb(0 0 0 / .1);
     font-family: Arial,sans-serif;
@@ -63,7 +62,7 @@
 
 #chat-input-wrapper {
     flex: 1;
-    margin-right: 10px
+    /* margin-right: 10px */
 }
 
 #send-btn {
