@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
+  <meta name="google-site-verification" content="6sxS9BeeG2LNNqPTJxZTiXTBvNHm1Hw3xsVEI2iYX1c" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>FormBotJS – Conversational Form Builder for Websites</title>
@@ -42,8 +43,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="src/formbot.min.css" />
   <!-- ✅ Your component stylesheet -->
-  <link rel="stylesheet" href="assets/index.css" />
-  
+  <link rel="stylesheet" href="assets/index.min.css" />
+
 </head>
 
 <body data-bs-spy="scroll" data-bs-target=".navbar" data-bs-offset="70">
@@ -56,7 +57,7 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Home</a>
+            <a class="nav-link active" aria-current="page" href="#intro">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#chat-section">Demo</a>
@@ -77,14 +78,27 @@
   </nav>
 
 
-  <section class="hero-section">
+  <!-- <section class="hero-section" id="intro">
     <div class="container">
-      <h2>Create Conversational Forms in Seconds.</h2>
+      <h2>Create Conversational Forms in Minutes.</h2>
       <p class="mb-4">Easily collect user data using a chat-style form interface. 100% JS-based and developer friendly.
       </p>
       <button class="btn btn-demo" id="startDemoBtn">Try Demo</button>
     </div>
+  </section> -->
+  <section class="hero-section" id="intro">
+    <div class="container text-center py-5">
+      <h2 class="fw-bold mb-3">Build Conversational Forms with Pure JavaScript 💬</h2>
+      <p class="lead mb-4">
+        FormBotJS dynamically creates a chat-style form inside any container using simple configuration and HTML
+        attributes.
+        No need for external libraries — lightweight, flexible, and developer-friendly.
+      </p>
+      <a href="#chat-section" class="btn btn-primary btn-lg" id="startDemoBtn">Try the Demo</a>
+    </div>
   </section>
+
+
 
   <section id="chat-section" class="container my-4">
     <div class="row align-items-center text-center text-md-start">
@@ -106,7 +120,10 @@
         </div>
       </div>
       <!-- Left: Traditional form -->
-      <div class="col-12 col-md-5 mb-4 mb-md-0">
+      <div class="col-12 col-md-5 mb-4 mb-md-0" style="
+    max-height: 450px;
+    overflow: auto;
+">
         <form id="traditional-form" class="p-3 border rounded bg-light shadow-sm">
           <div class="mb-3">
             <label class="form-label">What’s your full name?</label>
